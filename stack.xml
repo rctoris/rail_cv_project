@@ -1,0 +1,19 @@
+<stack>
+ <description brief="Completed as a graduate class project, this stack tracks a toy computer using 2D RGB information and can cause the PR2 to point at the object in 3D space using the Kinect's point cloud.">Completed as a graduate class project, this stack tracks a toy computer using 2D RGB information and can cause the PR2 to point at the object in 3D space using the Kinect's point cloud.</description>
+ <author>Russell Toris</author>
+ <author>David Kent</author>
+ <author>Adrian‎ Boteanu</author>
+ <license>BSD</license>  
+ <review status="unreviewed" notes="" />
+ <url>http://ros.org/wiki/rail_cv_project</url>
+
+  <depend stack="ros" />
+  <depend stack="common_msgs" />
+  <depend stack="vision_opencv" />
+  <depend stack="perception_pcl" />
+  <depend stack="geometry" />
+  <depend stack="actionlib" />
+  <depend stack="arm_navigation" />
+  <depend stack="pr2_arm_navigation" />
+  <depend stack="openni_launch" />
+</stack>

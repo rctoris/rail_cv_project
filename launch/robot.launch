@@ -1,0 +1,9 @@
+<!--
+   Author: Russell Toris, Worcester Polytechnic Institute
+  Version: Aug 2, 2012
+-->
+
+<launch>
+  <include file="$(find pr2_3dnav)/both_arms_navigation.launch" />
+  <include file="/etc/ros/openni_head.launch" />
+</launch>

@@ -1,0 +1,6 @@
+.svn
+.project
+.cproject
+.pydevproject
+bin
+build
