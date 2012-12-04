@@ -54,14 +54,27 @@ processor::processor() :
   }
   else
   {
-    capture = false;
-    last_x = 0;
-    last_y = 0;
+    string capture_input_2;
+    cout << "Would you like to run the classifier accuracy test? (Y/n): ";
+    cin >> capture_input_2;
 
     // create the classifier
     bayes = new CvNormalBayesClassifier();
     // train the classifier
     train();
+
+    // check if we are running or
+    if (capture_input_2.compare("Y") == 0 || capture_input_2.compare("y") == 0)
+    {
+      // run the test
+      accuracy();
+    }
+    else
+    {
+      capture = false;
+      last_x = 0;
+      last_y = 0;
+    }
   }
 }
 
@@ -153,6 +166,119 @@ void processor::train()
   bayes->train(training, resp);
 
   cout << "-- Model Trained --" << endl;
+}
+
+void processor::accuracy()
+{
+  cout << "-- Begin Model Test --" << endl;
+  string path = ros::package::getPath("rail_cv_project");
+
+  // load all training images
+  int num_correct = 0;
+  int false_positive = 0;
+  for (int i = 0; i < NUM_COMPUTER; i++)
+  {
+    stringstream s;
+    s << path << "/img/computer" << i << ".jpg";
+    vector<float> v = get_feature_vector(imread(s.str()));
+    Mat pred(1, v.size(), CV_32FC1);
+    for (uint j = 0; j < v.size(); j++)
+      pred.at<float>(0, j) = v.at(j);
+
+    // check if we found a computer
+    if ((int)bayes->predict(pred) == COMPUTER)
+      num_correct++;
+  }
+  for (int i = 0; i < NUM_TURTLE; i++)
+  {
+    stringstream s;
+    s << path << "/img/turtle" << i << ".jpg";
+    cout << "\tTraining '" << s.str() << "'..." << endl;
+    vector<float> v = get_feature_vector(imread(s.str()));
+    Mat pred(1, v.size(), CV_32FC1);
+    for (uint j = 0; j < v.size(); j++)
+      pred.at<float>(0, j) = v.at(j);
+
+    // check if we found a computer
+    if ((int)bayes->predict(pred) == COMPUTER)
+      false_positive++;
+  }
+  for (int i = 0; i < NUM_ROBOT; i++)
+  {
+    stringstream s;
+    s << path << "/img/robot" << i << ".jpg";
+    cout << "\tTraining '" << s.str() << "'..." << endl;
+    vector<float> v = get_feature_vector(imread(s.str()));
+    Mat pred(1, v.size(), CV_32FC1);
+    for (uint j = 0; j < v.size(); j++)
+      pred.at<float>(0, j) = v.at(j);
+
+    // check if we found a computer
+    if ((int)bayes->predict(pred) == COMPUTER)
+      false_positive++;
+  }
+  for (int i = 0; i < NUM_BSG; i++)
+  {
+    stringstream s;
+    s << path << "/img/bsg" << i << ".jpg";
+    cout << "\tTraining '" << s.str() << "'..." << endl;
+    vector<float> v = get_feature_vector(imread(s.str()));
+    Mat pred(1, v.size(), CV_32FC1);
+    for (uint j = 0; j < v.size(); j++)
+      pred.at<float>(0, j) = v.at(j);
+
+    // check if we found a computer
+    if ((int)bayes->predict(pred) == COMPUTER)
+      false_positive++;
+  }
+  for (int i = 0; i < NUM_PENS; i++)
+  {
+    stringstream s;
+    s << path << "/img/pens" << i << ".jpg";
+    cout << "\tTraining '" << s.str() << "'..." << endl;
+    vector<float> v = get_feature_vector(imread(s.str()));
+    Mat pred(1, v.size(), CV_32FC1);
+    for (uint j = 0; j < v.size(); j++)
+      pred.at<float>(0, j) = v.at(j);
+
+    // check if we found a computer
+    if ((int)bayes->predict(pred) == COMPUTER)
+      false_positive++;
+  }
+  for (int i = 0; i < NUM_COVERS; i++)
+  {
+    stringstream s;
+    s << path << "/img/cover" << i << ".jpg";
+    cout << "\tTraining '" << s.str() << "'..." << endl;
+    vector<float> v = get_feature_vector(imread(s.str()));
+    Mat pred(1, v.size(), CV_32FC1);
+    for (uint j = 0; j < v.size(); j++)
+      pred.at<float>(0, j) = v.at(j);
+
+    // check if we found a computer
+    if ((int)bayes->predict(pred) == COMPUTER)
+      false_positive++;
+  }
+  for (int i = 0; i < NUM_OTHER; i++)
+  {
+    stringstream s;
+    s << path << "/img/other" << i << ".jpg";
+    cout << "\tTraining '" << s.str() << "'..." << endl;
+    vector<float> v = get_feature_vector(imread(s.str()));
+    Mat pred(1, v.size(), CV_32FC1);
+    for (uint j = 0; j < v.size(); j++)
+      pred.at<float>(0, j) = v.at(j);
+
+    // check if we found a computer
+    if ((int)bayes->predict(pred) == COMPUTER)
+      false_positive++;
+  }
+
+  cout << "\tCorrect: " << ((double)num_correct) / NUM_COMPUTER << endl;
+  cout << "\tFalse Positive: "
+      << ((double)false_positive) / (NUM_TURTLE + NUM_ROBOT + NUM_BSG + NUM_PENS + NUM_COVERS + NUM_OTHER) << endl;
+  cout << "-- Model Test Finished --" << endl;
+  exit(EXIT_SUCCESS);
 }
 
 void processor::feed_cback(const sensor_msgs::Image::ConstPtr& img)

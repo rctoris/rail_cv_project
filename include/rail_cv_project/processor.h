@@ -300,6 +300,11 @@ private:
   void train();
 
   /**
+   * Runs the classifier accuracy test on the set of training images.
+   */
+  void accuracy();
+
+  /**
    * Performs a Canny edge operator and probabilistic Hough transform on the given image.
    *
    * @param src the image to perform the operations on
