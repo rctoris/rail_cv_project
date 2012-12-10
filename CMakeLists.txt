@@ -16,3 +16,5 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 rosbuild_add_executable(processor src/processor.cpp)
 rosbuild_add_executable(robot src/robot.cpp)
+
+rosbuild_make_distribution(0.1.0)
